@@ -382,7 +382,7 @@ int16_t adc_vbat_read(ADC_TypeDef *adc);
 /*
  * misclinous
  */
-#define PULSE do { palClearPad(GPIOC, GPIOC_LED); palSetPad(GPIOC, GPIOC_LED);} while(0)
+#define PULSE do { palClearPad(GPIOA, GPIOA_LED); palSetPad(GPIOA, GPIOA_LED);} while(0)
 
 // convert vbat [mV] to battery indicator
 static inline uint8_t vbat2bati(int16_t vbat)

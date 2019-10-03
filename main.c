@@ -653,7 +653,7 @@ bool sweep(bool break_on_operation)
     wait_dsp(delay);
 
     // blink LED while scanning
-    palClearPad(GPIOC, GPIOC_LED);
+    palClearPad(GPIOA, GPIOA_LED);
 
     /* calculate reflection coeficient */
     (*sample_func)(measured[0][i]);
@@ -665,7 +665,7 @@ bool sweep(bool break_on_operation)
     (*sample_func)(measured[1][i]);
 
     // blink LED while scanning
-    palSetPad(GPIOC, GPIOC_LED);
+    palSetPad(GPIOA, GPIOA_LED);
 
     if (cal_status & CALSTAT_APPLY)
       apply_error_term_at(i);
@@ -1756,14 +1756,14 @@ static void cmd_test(BaseSequentialStream *chp, int argc, char *argv[])
 #if 0
   int i;
   for (i = 0; i < 100; i++) {
-    palClearPad(GPIOC, GPIOC_LED);
+    palClearPad(GPIOA, GPIOA_LED);
     set_frequency(10000000);
-    palSetPad(GPIOC, GPIOC_LED);
+    palSetPad(GPIOA, GPIOA_LED);
     chThdSleepMilliseconds(50);
 
-    palClearPad(GPIOC, GPIOC_LED);
+    palClearPad(GPIOA, GPIOA_LED);
     set_frequency(90000000);
-    palSetPad(GPIOC, GPIOC_LED);
+    palSetPad(GPIOA, GPIOA_LED);
     chThdSleepMilliseconds(50);
   }
 #endif
@@ -1775,9 +1775,9 @@ static void cmd_test(BaseSequentialStream *chp, int argc, char *argv[])
     mode = atoi(argv[0]);
 
   for (i = 0; i < 20; i++) {
-    palClearPad(GPIOC, GPIOC_LED);
+    palClearPad(GPIOA, GPIOA_LED);
     ili9341_test(mode);
-    palSetPad(GPIOC, GPIOC_LED);
+    palSetPad(GPIOA, GPIOA_LED);
     chThdSleepMilliseconds(50);
   }
 #endif
@@ -1957,8 +1957,7 @@ int main(void)
 
     //palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(1) | PAL_STM32_OTYPE_OPENDRAIN);
     //palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(1) | PAL_STM32_OTYPE_OPENDRAIN);
-    i2cStart(&I2CD1, &i2ccfg);
-    si5351_init();
+    //si5351_init();
 
     // MCO on PA8
     //palSetPadMode(GPIOA, 8, PAL_MODE_ALTERNATE(0));
@@ -1990,13 +1989,6 @@ int main(void)
 
   /* restore config */
   config_recall();
-
-  dac1cfg1.init = config.dac_value;
-  /*
-   * Starting DAC1 driver, setting up the output pin as analog as suggested
-   * by the Reference Manual.
-   */
-  dacStart(&DACD2, &dac1cfg1);
 
   /* initial frequencies */
   update_frequencies();

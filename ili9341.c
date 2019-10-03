@@ -21,12 +21,12 @@
 #include "hal.h"
 #include "nanovna.h"
 
-#define RESET_ASSERT	palClearPad(GPIOA, 15)
-#define RESET_NEGATE	palSetPad(GPIOA, 15)
-#define CS_LOW			palClearPad(GPIOB, 6)
-#define CS_HIGH			palSetPad(GPIOB, 6)
-#define DC_CMD			palClearPad(GPIOB, 7)
-#define DC_DATA			palSetPad(GPIOB, 7)
+#define RESET_ASSERT	;
+#define RESET_NEGATE	;
+#define CS_LOW			palClearPad(GPIOA, 15)
+#define CS_HIGH			palSetPad(GPIOA, 15)
+#define DC_CMD			palClearPad(GPIOB, 6)
+#define DC_DATA			palSetPad(GPIOB, 6)
 
 uint16_t spi_buffer[1024];
 
