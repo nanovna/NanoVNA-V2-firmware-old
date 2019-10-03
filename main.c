@@ -22,7 +22,20 @@
 #include "hal.h"
 #include "usbcfg.h"
 #include "si5351.h"
-#include "nanovna.h"
+#include "common.h"
+#include "globals.h"
+#include "ch.h"
+#include "main.h"
+#include "adc.h"
+#include "flash.h"
+#include "si5351.h"
+#include "ui.h"
+#include "dsp.h"
+#include "tlv320aic3204.h"
+#include "numfont20x24.h"
+#include "Font5x7.h"
+#include "plot.h"
+#include "ili9341.h"
 #include "fft.h"
 
 #include <chprintf.h>
@@ -1408,33 +1421,7 @@ static void cmd_recall(BaseSequentialStream *chp, int argc, char *argv[])
   chprintf(chp, "recall {id}\r\n");
 }
 
-const struct {
-  const char *name;
-  uint16_t refpos;
-  float scale_unit;
-} trace_info[] = {
-  { "LOGMAG", 7, 10 },
-  { "PHASE",  4, 90 },
-  { "DELAY",  4,  1 },
-  { "SMITH",  0,  1 },
-  { "POLAR",  0,  1 },
-  { "LINEAR", 0,  0.125 },
-  { "SWR",    0,  1 },
-  { "REAL",   4,  0.25 },
-  { "IMAG",   4,  0.25 },
-  { "R",      0, 100 },
-  { "X",      4, 100 }
-};
 
-const char * const trc_channel_name[] = {
-  "CH0", "CH1"
-};
-
-const char *
-get_trace_typename(int t)
-{
-  return trace_info[trace[t].type].name;
-}
 
 void set_trace_type(int t, int type)
 {
@@ -1479,10 +1466,6 @@ void set_trace_scale(int t, float scale)
   }
 }
 
-float get_trace_scale(int t)
-{
-  return trace[t].scale * trace_info[trace[t].type].scale_unit;
-}
 
 void set_trace_refpos(int t, float refpos)
 {
@@ -1492,10 +1475,6 @@ void set_trace_refpos(int t, float refpos)
   }
 }
 
-float get_trace_refpos(int t)
-{
-  return trace[t].refpos;
-}
 
 float
 my_atof(const char *p)

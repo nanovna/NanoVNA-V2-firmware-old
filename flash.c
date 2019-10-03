@@ -19,7 +19,9 @@
  */
 #include "ch.h"
 #include "hal.h"
-#include "nanovna.h"
+#include "common.h"
+#include "globals.h"
+#include "flash.h"
 #include <string.h>
 
 static int flash_wait_for_last_operation(void)

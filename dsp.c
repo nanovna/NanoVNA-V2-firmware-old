@@ -19,7 +19,8 @@
  */
 
 #include <arm_math.h>
-#include "nanovna.h"
+#include "common.h"
+#include "dsp.h"
 
 int16_t samp_buf[SAMPLE_LEN];
 int16_t ref_buf[SAMPLE_LEN];

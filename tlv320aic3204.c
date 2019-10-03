@@ -18,7 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "hal.h"
-#include "nanovna.h"
+#include "common.h"
+#include "tlv320aic3204.h"
 
 #define REFCLK_8000KHZ
 #define AIC3204_ADDR 0x18

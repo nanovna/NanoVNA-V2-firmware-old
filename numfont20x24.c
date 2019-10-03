@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "numfont20x24.h"
 #include <stdint.h>
 
 const uint32_t numfont20x24[][24] = {

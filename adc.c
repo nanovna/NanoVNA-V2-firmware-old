@@ -19,7 +19,12 @@
  */
 #include "ch.h"
 #include "hal.h"
-#include "nanovna.h"
+#include "common.h"
+#include "adc.h"
+
+// TODO(gabu-chan): remove the call to handle_touch_interrupt(), remove
+// this dependency and use a proper callback system.
+#include "ui.h"
 
 
 #define ADC_TR(low, high)               (((uint32_t)(high) << 16U) |        \

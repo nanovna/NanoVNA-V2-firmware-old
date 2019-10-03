@@ -3,12 +3,17 @@
 #include "ch.h"
 #include "hal.h"
 #include "chprintf.h"
-#include "nanovna.h"
+#include "common.h"
+#include "globals.h"
+#include "plot.h"
+#include "leds.h"
+#include "ui.h"
+#include "ili9341.h"
+#include "Font5x7.h"
 
 #define SWAP(x,y) do { int z=x; x = y; y = z; } while(0)
 
 static void cell_draw_marker_info(int m, int n, int w, int h);
-void draw_frequencies(void);
 void frequency_string(char *buf, size_t len, int32_t freq);
 void markmap_all_markers(void);
 
@@ -744,7 +749,7 @@ clear_markmap(void)
   memset(markmap[current_mappage], 0, sizeof markmap[current_mappage]);
 }
 
-void inline
+inline void
 force_set_markmap(void)
 {
   memset(markmap[current_mappage], 0xff, sizeof markmap[current_mappage]);

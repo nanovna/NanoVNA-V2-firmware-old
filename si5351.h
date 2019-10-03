@@ -17,6 +17,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
+#pragma once
+
+#include <stdint.h>
+
 #define SI5351_PLL_A	0
 #define SI5351_PLL_B	1
 
@@ -87,3 +91,7 @@ void si5351_setupMultisynth(uint8_t     output,
                             uint8_t drive_strength);
 
 void si5351_set_frequency(int channel, int freq, uint8_t drive_strength);
+
+
+int si5351_set_frequency_with_offset(int freq, int offset, uint8_t drive_strength);
+

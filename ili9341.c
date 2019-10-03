@@ -19,7 +19,10 @@
  */
 #include "ch.h"
 #include "hal.h"
-#include "nanovna.h"
+#include "common.h"
+#include "ili9341.h"
+#include "Font5x7.h"
+#include "numfont20x24.h"
 
 #define RESET_ASSERT	;
 #define RESET_NEGATE	;

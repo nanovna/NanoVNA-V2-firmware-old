@@ -19,8 +19,20 @@
  */
 
 #include "ch.h"
+#include "hal_streams.h"
+#include "chprintf.h"
 #include "hal.h"
-#include "nanovna.h"
+#include "common.h"
+#include "globals.h"
+#include "adc.h"
+#include "ili9341.h"
+#include "Font5x7.h"
+#include "plot.h"
+#include "flash.h"
+// TODO(gabu-chan): remove direct calls to main.h functions and
+// switch to a callback based system.
+#include "main.h"
+#include "ui.h"
 #include <stdlib.h>
 #include <string.h>
 
