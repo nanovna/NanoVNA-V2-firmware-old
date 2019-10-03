@@ -394,7 +394,7 @@ ili9341_drawstring_size(const char *str, int x, int y, uint16_t fg, uint16_t bg,
 #define SWAP(x,y) do { int z=x; x = y; y = z; } while(0)
 
 void
-ili9341_line(int x0, int y0, int x1, int y1, uint16_t fg)
+ili9341_line(int x0, int y0, int x1, int y1, int fg)
 {
   if (x0 > x1) {
     SWAP(x0, x1);
