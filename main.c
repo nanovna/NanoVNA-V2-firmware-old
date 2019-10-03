@@ -247,7 +247,7 @@ static void cmd_reset(BaseSequentialStream *chp, int argc, char *argv[])
 
     chprintf(chp, "Performing reset\r\n");
 
-    rccEnableWWDG(FALSE);
+    //rccEnableWWDG(FALSE);
 
     WWDG->CFR = 0x60;
     WWDG->CR = 0xff;
@@ -442,7 +442,8 @@ void i2s_end_callback(I2SDriver *i2sp, size_t offset, size_t n)
     --wait_count;
   }
 
-#if PORT_SUPPORTS_RT
+//#if PORT_SUPPORTS_RT
+#if false
   cnt_e = port_rt_get_counter_value();
   stat.interval_cycles = cnt_s - stat.last_counter_value;
   stat.busy_cycles = cnt_e - cnt_s;
@@ -1972,10 +1973,10 @@ int main(void)
    * Note, a delay is inserted in order to not have to disconnect the cable
    * after a reset.
    */
-    usbDisconnectBus(serusbcfg.usbp);
+    //usbDisconnectBus(serusbcfg.usbp);
     chThdSleepMilliseconds(100);
     usbStart(serusbcfg.usbp, &usbcfg);
-    usbConnectBus(serusbcfg.usbp);
+    //usbConnectBus(serusbcfg.usbp);
 
   /*
    * SPI LCD Initialize

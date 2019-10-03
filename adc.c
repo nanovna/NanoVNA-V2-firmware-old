@@ -26,45 +26,45 @@
                                          (uint32_t)(low))
 #define ADC_SMPR_SMP_1P5        0U  /**< @brief 14 cycles conversion time   */
 #define ADC_SMPR_SMP_239P5      7U  /**< @brief 252 cycles conversion time. */ 
-#define ADC_CFGR1_RES_12BIT             (0U << 3U)
+#define ADC_CFGR_RES_12BIT             (0U << 3U)
 
 void adc_init(void)
 {
-  rccEnableADC1(FALSE);
+  rccEnableADC12(FALSE);
 
   /* Ensure flag states */
   ADC1->IER = 0;
 
   /* Calibration procedure.*/
-  ADC->CCR = 0;
+  //ADC->CCR = 0;
   if (ADC1->CR & ADC_CR_ADEN) {
       ADC1->CR |= ~ADC_CR_ADDIS; /* Disable ADC */
   }
   while (ADC1->CR & ADC_CR_ADEN)
     ;
-  ADC1->CFGR1 &= ~ADC_CFGR1_DMAEN;
+  ADC1->CFGR &= ~ADC_CFGR_DMAEN;
   ADC1->CR |= ADC_CR_ADCAL;
   while (ADC1->CR & ADC_CR_ADCAL)
     ;
 
-  if (ADC1->ISR & ADC_ISR_ADRDY) {
-      ADC1->ISR |= ADC_ISR_ADRDY; /* clear ADRDY */
+  if (ADC1->ISR & ADC_ISR_ADRD) {
+      ADC1->ISR |= ADC_ISR_ADRD; /* clear ADRDY */
   }
   /* Enable ADC */
   ADC1->CR |= ADC_CR_ADEN;
-  while (!(ADC1->ISR & ADC_ISR_ADRDY))
+  while (!(ADC1->ISR & ADC_ISR_ADRD))
     ;
 }
 
-uint16_t adc_single_read(ADC_TypeDef *adc, uint32_t chsel)
+uint16_t adc_single_read(ADC_TypeDef *adc, uint32_t ch)
 {
   /* ADC setup */
   adc->ISR    = adc->ISR;
   adc->IER    = 0;
-  adc->TR     = ADC_TR(0, 0);
-  adc->SMPR   = ADC_SMPR_SMP_239P5;
-  adc->CFGR1  = ADC_CFGR1_RES_12BIT;
-  adc->CHSELR = chsel;
+  //adc->TR     = ADC_TR(0, 0);
+  //adc->SMPR   = ADC_SMPR_SMP_239P5;
+  adc->CFGR  = ADC_CFGR_RES_12BIT;
+  adc->SQR1 = (ch & 0b11111) << 6;
 
   /* ADC conversion start.*/
   adc->CR |= ADC_CR_ADSTART;
@@ -83,13 +83,13 @@ int16_t adc_vbat_read(ADC_TypeDef *adc)
 	float vbat = 0;
 	float vrefint = 0;
 
-	ADC->CCR |= ADC_CCR_VREFEN | ADC_CCR_VBATEN;
+	//ADC->CCR |= ADC_CCR_VREFEN | ADC_CCR_VBATEN;
 	// VREFINT == ADC_IN17
-	vrefint = adc_single_read(adc, ADC_CHSELR_CHSEL17);
+	vrefint = adc_single_read(adc, 17);
 	// VBAT == ADC_IN18
 	// VBATEN enables resiter devider circuit. It consume vbat power.
-	vbat = adc_single_read(adc, ADC_CHSELR_CHSEL18);
-	ADC->CCR &= ~(ADC_CCR_VREFEN | ADC_CCR_VBATEN);
+	vbat = adc_single_read(adc, 18);
+	//ADC->CCR &= ~(ADC_CCR_VREFEN | ADC_CCR_VBATEN);
 
 	uint16_t vbat_raw = (ADC_FULL_SCALE * VREFINT_CAL * vbat * 2 / (vrefint * ((1<<12)-1)));
 	if (vbat_raw < 100) {
@@ -105,20 +105,20 @@ void adc_start_analog_watchdogd(ADC_TypeDef *adc, uint32_t chsel)
 {
   uint32_t cfgr1;
 
-  cfgr1 = ADC_CFGR1_RES_12BIT | ADC_CFGR1_AWDEN
-    | ADC_CFGR1_EXTEN_0 // rising edge of external trigger
-    | ADC_CFGR1_EXTSEL_0 | ADC_CFGR1_EXTSEL_1; // TRG3  , /* CFGR1 */
+  cfgr1 = ADC_CFGR_RES_12BIT | ADC_CFGR_AWD1EN
+    | ADC_CFGR_EXTEN_0 // rising edge of external trigger
+    | ADC_CFGR_EXTSEL_0 | ADC_CFGR_EXTSEL_1; // TRG3  , /* CFGR */
 
   /* ADC setup, if it is defined a callback for the analog watch dog then it
      is enabled.*/
   adc->ISR    = adc->ISR;
-  adc->IER    = ADC_IER_AWDIE;
-  adc->TR     = ADC_TR(0, TOUCH_THRESHOLD);
-  adc->SMPR   = ADC_SMPR_SMP_1P5;
-  adc->CHSELR = chsel;
+  adc->IER    = ADC_IER_AWD2;
+  //adc->TR     = ADC_TR(0, TOUCH_THRESHOLD);
+  //adc->SMPR   = ADC_SMPR_SMP_1P5;
+  //adc->CHSELR = chsel;
 
   /* ADC configuration and start.*/
-  adc->CFGR1  = cfgr1;
+  adc->CFGR  = cfgr1;
 
   /* ADC conversion start.*/
   adc->CR |= ADC_CR_ADSTART;
@@ -149,7 +149,7 @@ void adc_interrupt(ADC_TypeDef *adc)
        to read data fast enough.*/
     
   }
-  if (isr & ADC_ISR_AWD) {
+  if (isr & ADC_ISR_AWD1) {
     /* Analog watchdog error.*/
     handle_touch_interrupt();
   }
