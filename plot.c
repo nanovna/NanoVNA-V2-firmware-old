@@ -619,7 +619,7 @@ gamma2imp(char *buf, int len, const float coeff[2], uint32_t frequency)
 }
 
 static void
-gamma2resistance(char *buf, int len, const float coeff[2], uint32_t frequency)
+gamma2resistance(char *buf, int len, const float coeff[2])
 {
   float z0 = 50;
   float d = z0 / ((1-coeff[0])*(1-coeff[0])+coeff[1]*coeff[1]);
@@ -628,7 +628,7 @@ gamma2resistance(char *buf, int len, const float coeff[2], uint32_t frequency)
 }
 
 static void
-gamma2reactance(char *buf, int len, const float coeff[2], uint32_t frequency)
+gamma2reactance(char *buf, int len, const float coeff[2])
 {
   float z0 = 50;
   float d = z0 / ((1-coeff[0])*(1-coeff[0])+coeff[1]*coeff[1]);
@@ -670,10 +670,10 @@ trace_get_value_string(int t, char *buf, int len, float coeff[2], uint32_t frequ
     chsnprintf(buf, len, "%.2fj", coeff[1]);
     break;
   case TRC_R:
-    gamma2resistance(buf, len, coeff, frequency);
+    gamma2resistance(buf, len, coeff);
     break;
   case TRC_X:
-    gamma2reactance(buf, len, coeff, frequency);
+    gamma2reactance(buf, len, coeff);
     break;
   //case TRC_ADMIT:
   case TRC_POLAR:
